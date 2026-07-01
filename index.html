@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual Flow — Sistema de Atendimentos e Vendas</title>
+<meta name="description" content="Manual interativo de utilização do sistema Flow de atendimentos e vendas — GAV Resorts.">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div class="progress-bar"><span id="progressFill"></span></div>
+<div class="overlay"></div>
+
+<!-- ============================ ROLE GATE (seleção de área) ============================ -->
+<div class="role-gate" id="roleGate">
+  <div class="role-gate-inner">
+    <div class="rg-brand">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="40" height="40" rx="12" fill="url(#gradMarkGate)"/>
+        <path d="M7 23c3.2-6.5 8-6.5 11.5 0s8.3 6.5 11.5 0" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <defs><linearGradient id="gradMarkGate" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#1FAE63"/><stop offset="1" stop-color="#0E1158"/></linearGradient></defs>
+      </svg>
+      Manual Flow
+    </div>
+    <h1>Qual é a sua área?</h1>
+    <p>Selecione seu perfil para ver apenas o conteúdo, as boas práticas e as dúvidas frequentes da sua função.</p>
+
+    <div class="carousel">
+      <button class="car-btn prev" aria-label="Anterior">‹</button>
+      <div class="car-track" id="carTrack">
+        <button class="role-card" data-role="admin"><span class="rc-ic">🛠️</span><span class="rc-title">Administrador / Supervisor de Sala</span></button>
+        <button class="role-card" data-role="captador"><span class="rc-ic">🧲</span><span class="rc-title">Captador</span></button>
+        <button class="role-card" data-role="recepcionista"><span class="rc-ic">🛎️</span><span class="rc-title">Recepcionista</span></button>
+        <button class="role-card" data-role="gerente-captacao"><span class="rc-ic">📋</span><span class="rc-title">Gerente de Captação</span></button>
+        <button class="role-card" data-role="gerente-sala"><span class="rc-ic">🧭</span><span class="rc-title">Gerente de Sala</span></button>
+        <button class="role-card" data-role="liner"><span class="rc-ic">🗣️</span><span class="rc-title">Liner</span></button>
+        <button class="role-card" data-role="closer"><span class="rc-ic">🤝</span><span class="rc-title">Closer</span></button>
+        <button class="role-card" data-role="revisor"><span class="rc-ic">🔍</span><span class="rc-title">Revisor</span></button>
+        <button class="role-card" data-role="sub-captacao"><span class="rc-ic">🧲</span><span class="rc-title">Sub Líder de Captação</span></button>
+        <button class="role-card" data-role="sub-vendas"><span class="rc-ic">💼</span><span class="rc-title">Sub Líder de Vendas</span></button>
+        <button class="role-card" data-role="assistente-contrato"><span class="rc-ic">📄</span><span class="rc-title">Assistente de Contrato</span></button>
+        <button class="role-card" data-role="gerente-regional"><span class="rc-ic">🌎</span><span class="rc-title">Gerente Regional</span></button>
+      </div>
+      <button class="car-btn next" aria-label="Próximo">›</button>
+    </div>
+
+    <button class="rg-skip" id="rgSkip">Ver o manual completo, com todas as áreas →</button>
+  </div>
+</div>
+
+<!-- ============================ SUPORTE (login + dashboard do SAC) ============================ -->
+<div class="support-gate" id="supportGate">
+  <div class="support-box">
+    <button class="support-close" type="button" data-close-support aria-label="Fechar">✕</button>
+
+    <form id="supportLoginForm" class="support-login">
+      <div class="rg-brand" style="color:var(--navy); justify-content:center;">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+          <rect width="40" height="40" rx="12" fill="url(#gradMarkSup)"/>
+          <path d="M7 23c3.2-6.5 8-6.5 11.5 0s8.3 6.5 11.5 0" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs><linearGradient id="gradMarkSup" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#1FAE63"/><stop offset="1" stop-color="#0E1158"/></linearGradient></defs>
+        </svg>
+        Área de suporte
+      </div>
+      <p class="support-sub">Entre para responder às dúvidas enviadas pelo SAC de cada área.</p>
+      <label>Usuário<input type="text" name="usuario" autocomplete="username" required></label>
+      <label>Senha<input type="password" name="senha" autocomplete="current-password" required></label>
+      <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">Entrar</button>
+      <p class="support-error"></p>
+    </form>
+
+    <div id="supportDash" class="support-dash" style="display:none;">
+      <div class="support-dash-head">
+        <h2>Dúvidas pendentes</h2>
+        <div class="support-dash-actions">
+          <select id="pendingAreaFilter">
+            <option value="">Todas as áreas</option>
+            <option value="admin">Administrador / Supervisor de Sala</option>
+            <option value="captador">Captador</option>
+            <option value="recepcionista">Recepcionista</option>
+            <option value="gerente-captacao">Gerente de Captação</option>
+            <option value="gerente-sala">Gerente de Sala</option>
+            <option value="liner">Liner</option>
+            <option value="closer">Closer</option>
+            <option value="revisor">Revisor</option>
+            <option value="sub-captacao">Sub Líder de Captação</option>
+            <option value="sub-vendas">Sub Líder de Vendas</option>
+            <option value="assistente-contrato">Assistente de Contrato</option>
+            <option value="gerente-regional">Gerente Regional</option>
+          </select>
+          <button id="refreshPending" class="btn" type="button">Atualizar</button>
+          <button id="logoutSupport" class="btn" type="button">Sair</button>
+        </div>
+      </div>
+      <div id="pendingList" class="pending-list"><p>Carregando...</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="app">
+
+  <!-- ============================ SIDEBAR ============================ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="40" height="40" rx="12" fill="url(#gradMark)"/>
+        <path d="M7 23c3.2-6.5 8-6.5 11.5 0s8.3 6.5 11.5 0" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <defs>
+          <linearGradient id="gradMark" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#1FAE63"/>
+            <stop offset="1" stop-color="#0E1158"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="brand-text">
+        <strong>Manual Flow</strong>
+        <span>Atendimentos &amp; Vendas</span>
+      </div>
+    </div>
+
+    <div class="search-wrap">
+      <div class="search-box">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#fff" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="searchInput" type="text" placeholder="Buscar no manual…" autocomplete="off">
+        <span class="search-kbd">/</span>
+      </div>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+
+    <nav class="nav-scroll">
+
+      <div class="nav-area" data-area="intro">
+        <button class="nav-area-btn"><span class="nav-area-num">01</span> Introdução &amp; Visão Geral <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="nav-sub">
+          <a href="#sec-objetivo">Objetivo do manual</a>
+          <a href="#sec-visao-geral">Visão geral do sistema</a>
+          <a href="#sec-conceitos">Conceitos principais</a>
+        </div>
+      </div>
+
+      <div class="nav-area" data-area="perfis">
+        <button class="nav-area-btn"><span class="nav-area-num">02</span> Perfis &amp; Acesso <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="nav-sub">
+          <a href="#sec-perfis">Perfis de usuário e responsabilidades</a>
+          <a href="#sec-acesso">Acesso ao sistema</a>
+        </div>
+      </div>
+
+      <div class="nav-area" data-area="telas">
+        <button class="nav-area-btn"><span class="nav-area-num">03</span> Telas do Sistema <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="nav-sub">
+          <a href="#sec-menu-telas">Menu lateral e principais telas</a>
+        </div>
+      </div>
+
+      <div class="nav-area" data-area="fluxo">
+        <button class="nav-area-btn"><span class="nav-area-num">04</span> Fluxo de Atendimento <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="nav-sub">
+          <a href="#sec-fluxo-geral">Fluxo geral do atendimento</a>
+          <a href="#sec-consultar">Consultar atendimentos</a>
+          <a href="#sec-criar">Criar novo atendimento</a>
+          <a href="#sec-captacao">Etapa de Captação</a>
+          <a href="#sec-recepcao">Etapa de Recepção</a>
+          <a href="#sec-gerente-sala">Etapa do Gerente de Sala</a>
+          <a href="#sec-liner">Etapa Liner / Apresentando</a>
+          <a href="#sec-closer">Etapa Closer / Negociação</a>
+        </div>
+      </div>
+
+      <div class="nav-area" data-area="proposta">
+        <button class="nav-area-btn"><span class="nav-area-num">05</span> Proposta &amp; Documentação <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="nav-sub">
+          <a href="#sec-proposta-venda">Proposta de Venda</a>
+          <a href="#sec-documentacao">Documentação</a>
+          <a href="#sec-revisao">Revisão e Finalização</a>
+        </div>
+      </div>
+
+      <div class="nav-area" data-area="gestao">
+        <button class="nav-area-btn"><span class="nav-area-num">06</span> Gestão &amp; Relatórios <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="nav-sub">
+          <a href="#sec-historico">Histórico</a>
+          <a href="#sec-monitor">Monitor de Sala, Mesa e Resumo</a>
+          <a href="#sec-relatorios">Relatórios e indicadores</a>
+          <a href="#sec-correcao">Correção de vendas</a>
+          <a href="#sec-usuarios">Gestão de usuários</a>
+          <a href="#sec-cotas">Cotas</a>
+        </div>
+      </div>
+
+      <div class="nav-area" data-area="praticas">
+        <button class="nav-area-btn"><span class="nav-area-num">07</span> Boas Práticas <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="nav-sub">
+          <a href="#sec-padrao">Padrão de preenchimento</a>
+          <a href="#sec-erros">Erros comuns e como evitar</a>
+          <a href="#sec-checklist">Checklist rápido por perfil</a>
+          <a href="#sec-roteiro">Roteiro rápido de treinamento</a>
+        </div>
+      </div>
+
+      <div class="nav-area" data-area="glossario">
+        <button class="nav-area-btn"><span class="nav-area-num">08</span> Glossário &amp; Anexos <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="nav-sub">
+          <a href="#sec-glossario">Glossário</a>
+          <a href="#sec-observacoes">Observações finais</a>
+        </div>
+      </div>
+
+    </nav>
+
+    <div class="sidebar-footer">
+      <span>Versão 1.0 · Flow / GAV Resorts</span>
+      <button id="openSupport" class="support-link" type="button">Área de suporte</button>
+    </div>
+  </aside>
+
+  <!-- ============================ MAIN ============================ -->
+  <div class="main">
+
+    <header class="topbar">
+      <button class="menu-toggle" aria-label="Abrir menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <div class="breadcrumb">Manual Flow <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="#9AA1B1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> <strong id="breadcrumbCurrent">Sumário</strong></div>
+      <div class="topbar-actions">
+        <div class="topbar-role" id="topbarRole" style="display:none;">
+          <span class="trl-label">Sua área: <strong id="topbarRoleName">—</strong></span>
+          <button data-action="switch-role" type="button">Trocar</button>
+        </div>
+        <button class="btn" id="printBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M6 9V3h12v6M6 18H4a1 1 0 01-1-1v-6a1 1 0 011-1h16a1 1 0 011 1v6a1 1 0 01-1 1h-2M6 14h12v7H6v-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="btn-text">Imprimir / PDF</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- ============================ HERO / SUMÁRIO ============================ -->
+      <section class="hero" id="topo">
+        <span class="eyebrow">Versão 1.0 · Sistema Flow</span>
+        <h1>Manual de Utilização — Atendimentos &amp; Vendas</h1>
+        <p class="lead">Guia interativo para usuários finais, supervisores, líderes e administradores. Orienta o uso operacional do sistema: telas, menus, perfis, fluxo de atendimento, proposta, documentação, revisão e boas práticas.</p>
+
+        <div class="toc-grid">
+          <a class="toc-card" href="#sec-objetivo"><span class="num">01</span><div><h3>Introdução &amp; Visão Geral</h3><p>Objetivo do manual, propósito do sistema e conceitos principais.</p></div></a>
+          <a class="toc-card" href="#sec-perfis"><span class="num">02</span><div><h3>Perfis &amp; Acesso</h3><p>Responsabilidades por perfil, login e dados de conta.</p></div></a>
+          <a class="toc-card" href="#sec-menu-telas"><span class="num">03</span><div><h3>Telas do Sistema</h3><p>Menu lateral e o que cada tela oferece.</p></div></a>
+          <a class="toc-card" href="#sec-fluxo-geral"><span class="num">04</span><div><h3>Fluxo de Atendimento</h3><p>Da Captação ao Closer — etapa a etapa.</p></div></a>
+          <a class="toc-card" href="#sec-proposta-venda"><span class="num">05</span><div><h3>Proposta &amp; Documentação</h3><p>Preenchimento da venda, contrato e revisão final.</p></div></a>
+          <a class="toc-card" href="#sec-historico"><span class="num">06</span><div><h3>Gestão &amp; Relatórios</h3><p>Histórico, indicadores, correção de vendas e usuários.</p></div></a>
+          <a class="toc-card" href="#sec-padrao"><span class="num">07</span><div><h3>Boas Práticas</h3><p>Padrões de preenchimento, erros comuns e checklists.</p></div></a>
+          <a class="toc-card" href="#sec-glossario"><span class="num">08</span><div><h3>Glossário &amp; Anexos</h3><p>Termos do sistema e observações finais.</p></div></a>
+        </div>
+      </section>
+
+      <!-- ============================ PAINÉIS POR ÁREA (perfil selecionado) ============================ -->
+      <div class="role-panel" data-role="admin" id="panel-admin">
+        <div class="role-panel-head">
+          <span class="rp-badge">🛠️</span>
+          <div>
+            <span class="rp-eyebrow">Sua área · Administrador / Supervisor de Sala</span>
+            <h2>Bem-vindo(a)! Aqui está o que mais importa para você.</h2>
+            <p>Você acompanha o fluxo completo, cadastra usuários e realiza correções quando necessário.</p>
+          </div>
+        </div>
+        <div class="rp-grid">
+          <div class="rp-col">
+            <h3>Boas práticas da sua área</h3>
+            <ul class="check-list">
+            <li>Revisar periodicamente as permissões cadastradas para cada função.</li>
+            <li>Acompanhar o Resumo e o Monitor de Sala diariamente para identificar gargalos.</li>
+            <li>Usar a Correção de Vendas somente após confirmar a causa da falha.</li>
+            <li>Orientar a equipe sobre o preenchimento correto antes de liberar acesso.</li>
+            <li>Manter o cadastro de usuários atualizado (sala, função, vínculos).</li>
+            </ul>
+          </div>
+          <div class="rp-col">
+            <h3>Dúvidas frequentes (SAC)</h3>
+            <div class="faq" id="faq-admin" data-area="admin"><p class="faq-loading">Carregando dúvidas desta área...</p></div>
+        </div>
+        </div>
+        <a class="rp-switch" href="#" data-action="switch-role">Não é essa a sua área? Trocar ↺</a>
+      </div>
+
+      <div class="role-panel" data-role="captador" id="panel-captador">
+        <div class="role-panel-head">
+          <span class="rp-badge">🧲</span>
+          <div>
+            <span class="rp-eyebrow">Sua área · Captador</span>
+            <h2>Bem-vindo(a)! Aqui está o que mais importa para você.</h2>
+            <p>Você registra a origem do lead/prospect e as informações iniciais de agendamento.</p>
+          </div>
+        </div>
+        <div class="rp-grid">
+          <div class="rp-col">
+            <h3>Boas práticas da sua área</h3>
+            <ul class="check-list">
+            <li>Confirmar sala, data e horário antes de salvar o atendimento.</li>
+            <li>Preencher o WhatsApp com DDI e número corretos.</li>
+            <li>Pesquisar se o casal/prospect já possui atendimento antes de criar um novo.</li>
+            <li>Registrar corretamente qualificação (Q/NQ) e motivo, quando aplicável.</li>
+            </ul>
+          </div>
+          <div class="rp-col">
+            <h3>Dúvidas frequentes (SAC)</h3>
+            <div class="faq" id="faq-captador" data-area="captador"><p class="faq-loading">Carregando dúvidas desta área...</p></div>
+        </div>
+        </div>
+        <a class="rp-switch" href="#" data-action="switch-role">Não é essa a sua área? Trocar ↺</a>
+      </div>
+
+      <div class="role-panel" data-role="recepcionista" id="panel-recepcionista">
+        <div class="role-panel-head">
+          <span class="rp-badge">🛎️</span>
+          <div>
+            <span class="rp-eyebrow">Sua área · Recepcionista</span>
+            <h2>Bem-vindo(a)! Aqui está o que mais importa para você.</h2>
+            <p>Você confirma a chegada do casal/prospect e completa os dados iniciais de atendimento.</p>
+          </div>
+        </div>
+        <div class="rp-grid">
+          <div class="rp-col">
+            <h3>Boas práticas da sua área</h3>
+            <ul class="check-list">
+            <li>Confirmar nome completo, CPF/CNPJ, e-mail e WhatsApp com o cliente.</li>
+            <li>Registrar acompanhantes, filhos e relação com o casal quando solicitado.</li>
+            <li>Verificar se o atendimento deve seguir para apresentação ou ser encerrado.</li>
+            <li>Só salvar após conferir os dados junto ao cliente.</li>
+            </ul>
+          </div>
+          <div class="rp-col">
+            <h3>Dúvidas frequentes (SAC)</h3>
+            <div class="faq" id="faq-recepcionista" data-area="recepcionista"><p class="faq-loading">Carregando dúvidas desta área...</p></div>
+        </div>
+        </div>
+        <a class="rp-switch" href="#" data-action="switch-role">Não é essa a sua área? Trocar ↺</a>
+      </div>
+
+      <div class="role-panel" data-role="gerente-captacao" id="panel-gerente-captacao">
+        <div class="role-panel-head">
+          <span class="rp-badge">📋</span>
+          <div>
+            <span class="rp-eyebrow">Sua área · Gerente de Captação</span>
+            <h2>Bem-vindo(a)! Aqui está o que mais importa para você.</h2>
+            <p>Você acompanha a captação, valida a qualificação e apoia a passagem para as etapas comerciais.</p>
+          </div>
+        </div>
+        <div class="rp-grid">
+          <div class="rp-col">
+            <h3>Boas práticas da sua área</h3>
+            <ul class="check-list">
+            <li>Revisar diariamente os atendimentos qualificados e não qualificados da equipe de captação.</li>
+            <li>Garantir que os motivos de NQ/No Tour estejam corretos antes de encerrar.</li>
+            <li>Acompanhar a passagem dos atendimentos para Recepção e Apresentação.</li>
+            <li>Orientar captadores sobre preenchimento de sala, horário e WhatsApp.</li>
+            </ul>
+          </div>
+          <div class="rp-col">
+            <h3>Dúvidas frequentes (SAC)</h3>
+            <div class="faq" id="faq-gerente-captacao" data-area="gerente-captacao"><p class="faq-loading">Carregando dúvidas desta área...</p></div>
+        </div>
+        </div>
+        <a class="rp-switch" href="#" data-action="switch-role">Não é essa a sua área? Trocar ↺</a>
+      </div>
+
+      <div class="role-panel" data-role="gerente-sala" id="panel-gerente-sala">
+        <div class="role-panel-head">
+          <span class="rp-badge">🧭</span>
+          <div>
+            <span class="rp-eyebrow">Sua área · Gerente de Sala</span>
+            <h2>Bem-vindo(a)! Aqui está o que mais importa para você.</h2>
+            <p>Você gerencia a operação da sala, distribuindo e acompanhando atendimentos entre Liner e Closer.</p>
+          </div>
+        </div>
+        <div class="rp-grid">
+          <div class="rp-col">
+            <h3>Boas práticas da sua área</h3>
+            <ul class="check-list">
+            <li>Acompanhar a fila de atendimentos da sala em tempo real.</li>
+            <li>Definir Liner e Closer de forma equilibrada entre a equipe.</li>
+            <li>Intervir rapidamente em atendimentos parados ou com inconsistência.</li>
+            <li>Revisar indicadores de Mesa e Monitor de Sala ao longo do dia.</li>
+            </ul>
+          </div>
+          <div class="rp-col">
+            <h3>Dúvidas frequentes (SAC)</h3>
+            <div class="faq" id="faq-gerente-sala" data-area="gerente-sala"><p class="faq-loading">Carregando dúvidas desta área...</p></div>
+        </div>
+        </div>
+        <a class="rp-switch" href="#" data-action="switch-role">Não é essa a sua área? Trocar ↺</a>
+      </div>
+
+      <div class="role-panel" data-role="liner" id="panel-liner">
+        <div class="role-panel-head">
+          <span class="rp-badge">🗣️</span>
+          <div>
+            <span class="rp-eyebrow">Sua área · Liner</span>
+            <h2>Bem-vindo(a)! Aqui está o que mais importa para você.</h2>
+            <p>Você conduz a apresentação e complementa os dados comerciais e cadastrais do casal/prospect.</p>
+          </div>
+        </div>
+        <div class="rp-grid">
+          <div class="rp-col">
+            <h3>Boas práticas da sua área</h3>
+            <ul class="check-list">
+            <li>Preencher completamente dados pessoais, do cônjuge e perfil econômico.</li>
+            <li>Confirmar veículos, renda e uso de cartão de crédito quando informado pelo cliente.</li>
+            <li>Registrar a origem do casal com precisão.</li>
+            <li>Não avançar para negociação com dados incompletos.</li>
+            </ul>
+          </div>
+          <div class="rp-col">
+            <h3>Dúvidas frequentes (SAC)</h3>
+            <div class="faq" id="faq-liner" data-area="liner"><p class="faq-loading">Carregando dúvidas desta área...</p></div>
+        </div>
+        </div>
+        <a class="rp-switch" href="#" data-action="switch-role">Não é essa a sua área? Trocar ↺</a>
+      </div>
+
+      <div class="role-panel" data-role="closer" id="panel-closer">
+        <div class="role-panel-head">
+          <span class="rp-badge">🤝</span>
+          <div>
+            <span class="rp-eyebrow">Sua área · Closer</span>
+            <h2>Bem-vindo(a)! Aqui está o que mais importa para você.</h2>
+            <p>Você conduz a negociação e direciona o atendimento para proposta, documentação ou encerramento.</p>
+          </div>
+        </div>
+        <div class="rp-grid">
+          <div class="rp-col">
+            <h3>Boas práticas da sua área</h3>
+            <ul class="check-list">
+            <li>Confirmar se todos os dados necessários para a proposta já foram preenchidos pelo Liner.</li>
+            <li>Registrar o resultado real da negociação, sem pular etapas.</li>
+            <li>Conferir valores, parcelas e forma de pagamento antes de salvar a proposta.</li>
+            <li>Não avançar para documentação com dados divergentes.</li>
+            </ul>
+          </div>
+          <div class="rp-col">
+            <h3>Dúvidas frequentes (SAC)</h3>
+            <div class="faq" id="faq-closer" data-area="closer"><p class="faq-loading">Carregando dúvidas desta área...</p></div>
+        </div>
+        </div>
+        <a class="rp-switch" href="#" data-action="switch-role">Não é essa a sua área? Trocar ↺</a>
+      </div>
+
+      <div class="role-panel" data-role="revisor" id="panel-revisor">
+        <div class="role-panel-head">
+          <span class="rp-badge">🔍</span>
+          <div>
+            <span class="rp-eyebrow">Sua área · Revisor</span>
+            <h2>Bem-vindo(a)! Aqui está o que mais importa para você.</h2>
+            <p>Você confere os dados do atendimento e da venda antes da finalização.</p>
+          </div>
+        </div>
+        <div class="rp-grid">
+          <div class="rp-col">
+            <h3>Boas práticas da sua área</h3>
+            <ul class="check-list">
+            <li>Conferir dados cadastrais, comerciais e de pagamento antes de finalizar.</li>
+            <li>Verificar se todos os documentos e assinaturas necessários estão presentes.</li>
+            <li>Não finalizar atendimentos com divergência — devolver para correção.</li>
+            <li>Registrar observações claras quando encontrar um problema.</li>
+            </ul>
+          </div>
+          <div class="rp-col">
+            <h3>Dúvidas frequentes (SAC)</h3>
+            <div class="faq" id="faq-revisor" data-area="revisor"><p class="faq-loading">Carregando dúvidas desta área...</p></div>
+        </div>
+        </div>
+        <a class="rp-switch" href="#" data-action="switch-role">Não é essa a sua área? Trocar ↺</a>
+      </div>
+
+      <div class="role-panel" data-role="sub-captacao" id="panel-sub-captacao">
+        <div class="role-panel-head">
+          <span class="rp-badge">🧲</span>
+          <div>
+            <span class="rp-eyebrow">Sua área · Sub Líder de Captação</span>
+            <h2>Bem-vindo(a)! Aqui está o que mais importa para você.</h2>
+            <p>Você apoia a captação e a organização dos agendamentos da equipe.</p>
+          </div>
+        </div>
+        <div class="rp-grid">
+          <div class="rp-col">
+            <h3>Boas práticas da sua área</h3>
+            <ul class="check-list">
+            <li>Acompanhar a agenda de horários da equipe de captação.</li>
+            <li>Orientar captadores sobre preenchimento correto de sala, data e WhatsApp.</li>
+            <li>Ajudar a resolver atendimentos parados na etapa de Captação.</li>
+            <li>Reportar ao Gerente de Captação inconsistências recorrentes.</li>
+            </ul>
+          </div>
+          <div class="rp-col">
+            <h3>Dúvidas frequentes (SAC)</h3>
+            <div class="faq" id="faq-sub-captacao" data-area="sub-captacao"><p class="faq-loading">Carregando dúvidas desta área...</p></div>
+        </div>
+        </div>
+        <a class="rp-switch" href="#" data-action="switch-role">Não é essa a sua área? Trocar ↺</a>
+      </div>
+
+      <div class="role-panel" data-role="sub-vendas" id="panel-sub-vendas">
+        <div class="role-panel-head">
+          <span class="rp-badge">💼</span>
+          <div>
+            <span class="rp-eyebrow">Sua área · Sub Líder de Vendas</span>
+            <h2>Bem-vindo(a)! Aqui está o que mais importa para você.</h2>
+            <p>Você apoia a gestão de sala, negociação, documentação e finalização.</p>
+          </div>
+        </div>
+        <div class="rp-grid">
+          <div class="rp-col">
+            <h3>Boas práticas da sua área</h3>
+            <ul class="check-list">
+            <li>Acompanhar Liner e Closer durante o atendimento.</li>
+            <li>Apoiar na conferência da proposta antes do envio para documentação.</li>
+            <li>Ajudar a destravar atendimentos parados em qualquer etapa comercial.</li>
+            <li>Garantir que a documentação e assinatura estejam completas antes da revisão.</li>
+            </ul>
+          </div>
+          <div class="rp-col">
+            <h3>Dúvidas frequentes (SAC)</h3>
+            <div class="faq" id="faq-sub-vendas" data-area="sub-vendas"><p class="faq-loading">Carregando dúvidas desta área...</p></div>
+        </div>
+        </div>
+        <a class="rp-switch" href="#" data-action="switch-role">Não é essa a sua área? Trocar ↺</a>
+      </div>
+
+      <div class="role-panel" data-role="assistente-contrato" id="panel-assistente-contrato">
+        <div class="role-panel-head">
+          <span class="rp-badge">📄</span>
+          <div>
+            <span class="rp-eyebrow">Sua área · Assistente de Contrato</span>
+            <h2>Bem-vindo(a)! Aqui está o que mais importa para você.</h2>
+            <p>Você apoia documentação, revisão e correções administrativas, conforme permissão liberada.</p>
+          </div>
+        </div>
+        <div class="rp-grid">
+          <div class="rp-col">
+            <h3>Boas práticas da sua área</h3>
+            <ul class="check-list">
+            <li>Conferir contrato, checklist e assinatura antes de encaminhar para revisão.</li>
+            <li>Usar a Correção de Vendas apenas mediante autorização ou documento válido.</li>
+            <li>Registrar claramente o motivo de qualquer edição realizada.</li>
+            <li>Confirmar dados de pagamento (NSU, autorização, operação) antes de liberar o documento.</li>
+            </ul>
+          </div>
+          <div class="rp-col">
+            <h3>Dúvidas frequentes (SAC)</h3>
+            <div class="faq" id="faq-assistente-contrato" data-area="assistente-contrato"><p class="faq-loading">Carregando dúvidas desta área...</p></div>
+        </div>
+        </div>
+        <a class="rp-switch" href="#" data-action="switch-role">Não é essa a sua área? Trocar ↺</a>
+      </div>
+
+      <div class="role-panel" data-role="gerente-regional" id="panel-gerente-regional">
+        <div class="role-panel-head">
+          <span class="rp-badge">🌎</span>
+          <div>
+            <span class="rp-eyebrow">Sua área · Gerente Regional</span>
+            <h2>Bem-vindo(a)! Aqui está o que mais importa para você.</h2>
+            <p>Você acompanha indicadores, resumo e desempenho das salas sob sua gestão.</p>
+          </div>
+        </div>
+        <div class="rp-grid">
+          <div class="rp-col">
+            <h3>Boas práticas da sua área</h3>
+            <ul class="check-list">
+            <li>Revisar o Resumo e o Monitor de Sala regularmente para identificar tendências.</li>
+            <li>Comparar indicadores entre salas para apoiar decisões de gestão.</li>
+            <li>Acompanhar Show Rate, ticket médio e motivos de NQ por sala.</li>
+            <li>Usar exportação de relatórios para análises mais aprofundadas.</li>
+            </ul>
+          </div>
+          <div class="rp-col">
+            <h3>Dúvidas frequentes (SAC)</h3>
+            <div class="faq" id="faq-gerente-regional" data-area="gerente-regional"><p class="faq-loading">Carregando dúvidas desta área...</p></div>
+        </div>
+        </div>
+        <a class="rp-switch" href="#" data-action="switch-role">Não é essa a sua área? Trocar ↺</a>
+      </div>
+
+      <!-- ============================ ÁREA 01 — INTRODUÇÃO ============================ -->
+      <div class="area-block" id="area-intro" data-area-id="intro" data-area-name="Introdução &amp; Visão Geral">
+        <div class="area-title">
+          <span class="badge">01</span>
+          <div><h2>Introdução &amp; Visão Geral</h2><div class="area-sub">Para que serve este manual e como o sistema está organizado</div></div>
+        </div>
+
+        <section class="section" id="sec-objetivo">
+          <h3>1. Objetivo do manual</h3>
+          <p>Este manual foi criado para orientar os usuários na utilização do sistema de atendimentos e vendas. O foco é apresentar o fluxo de trabalho, as responsabilidades de cada perfil e o passo a passo das principais rotinas operacionais.</p>
+          <div class="callout info">
+            <div class="ic">ℹ️</div>
+            <div><strong>Importante</strong>Alguns nomes de botões e campos podem variar conforme a configuração da empresa, perfil de acesso ou versão publicada do sistema. Use este manual como base de treinamento e valide regras específicas com a liderança ou administração do sistema.</div>
+          </div>
+        </section>
+
+        <section class="section" id="sec-visao-geral">
+          <h3>2. Visão geral do sistema</h3>
+          <p>O sistema organiza o atendimento comercial desde a captação do casal/prospect até a proposta de venda, documentação, revisão e finalização. O fluxo é dividido em etapas, e cada etapa pode ser acessada conforme o perfil do usuário.</p>
+          <ul class="check-list">
+            <li>Centralizar atendimentos, histórico, monitoramento de sala e proposta de venda.</li>
+            <li>Controlar a passagem do atendimento entre Captação, Recepção, Gerência de Sala, Liner, Closer, Documentação, Revisão e Finalização.</li>
+            <li>Permitir filtro por sala, data, status e busca de atendimentos.</li>
+            <li>Gerenciar usuários, funções, permissões e dados de perfil.</li>
+            <li>Apoiar correções de venda, cotas, reprocessamento e acompanhamento por relatórios/resumo.</li>
+          </ul>
+        </section>
+
+        <section class="section" id="sec-conceitos">
+          <h3>3. Conceitos principais</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th style="width:22%">Conceito</th><th>Descrição para o usuário</th></tr></thead>
+              <tbody>
+                <tr><td>Atendimento</td><td>Registro principal do processo comercial. Reúne dados do casal/prospect, sala, horários, etapas, responsáveis e status.</td></tr>
+                <tr><td>Etapa</td><td>Momento atual do atendimento dentro do fluxo, como Captação, Recepção, Apresentando, Negociando, Documentação ou Revisão.</td></tr>
+                <tr><td>Sala de atendimento</td><td>Unidade, stand ou sala onde o atendimento ocorre. Pode ser usada para filtro e controle operacional.</td></tr>
+                <tr><td>Perfil/Função</td><td>Permissão vinculada ao usuário. Define quais telas, etapas e ações ficam disponíveis.</td></tr>
+                <tr><td>Q / NQ</td><td>Indicação de qualificação. Q representa qualificado; NQ representa não qualificado conforme critérios internos.</td></tr>
+                <tr><td>No Tour</td><td>Motivo de encerramento quando o casal/prospect não segue para o tour ou não atende às condições de continuidade.</td></tr>
+                <tr><td>Proposta de venda</td><td>Tela onde são registrados empreendimento, unidade, valor, desconto, parcelas, meio de pagamento e demais dados da venda.</td></tr>
+                <tr><td>Documentação</td><td>Etapa destinada à geração, conferência e envio dos documentos/contratos relacionados à venda.</td></tr>
+                <tr><td>Revisão</td><td>Conferência final dos dados antes da finalização do atendimento/venda.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- ============================ ÁREA 02 — PERFIS & ACESSO ============================ -->
+      <div class="area-block" id="area-perfis" data-area-id="perfis" data-area-name="Perfis &amp; Acesso">
+        <div class="area-title">
+          <span class="badge">02</span>
+          <div><h2>Perfis &amp; Acesso</h2><div class="area-sub">Quem faz o quê dentro do sistema, e como entrar</div></div>
+        </div>
+
+        <section class="section" id="sec-perfis">
+          <h3>4. Perfis de usuário e responsabilidades</h3>
+          <p>O acesso às etapas depende da função atribuída ao usuário. O administrador possui visão ampla; os demais perfis visualizam e executam as etapas compatíveis com sua responsabilidade.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Perfil</th><th>Responsabilidade principal</th><th>Etapas comuns de atuação</th></tr></thead>
+              <tbody>
+                <tr><td><span class="pill">Administrador</span></td><td>Configurar usuários, acompanhar o fluxo completo e apoiar correções.</td><td>Captação, Recepção, Gerência, Liner, Closer, Documentação, Revisão, Anexos e Finalização.</td></tr>
+                <tr><td><span class="pill">Captador</span></td><td>Cadastrar ou acompanhar leads/prospects de captação.</td><td>Captação e Agendado.</td></tr>
+                <tr><td><span class="pill">Recepcionista</span></td><td>Confirmar presença, dados iniciais e direcionamento do atendimento.</td><td>Recepção e Agendado.</td></tr>
+                <tr><td><span class="pill">Gerente de Captação</span></td><td>Acompanhar captação, qualificação e passagem para etapas comerciais.</td><td>Captação, Recepção, Gerente de Captação, Apresentação, Liner, Closer, Documentação e Revisão.</td></tr>
+                <tr><td><span class="pill">Gerente de Sala</span></td><td>Gerir a operação da sala e distribuir/acompanhar atendimentos.</td><td>Recepção, Apresentação, Liner, Closer, Negociação, Documentação, Revisão e Agendado.</td></tr>
+                <tr><td><span class="pill">Liner</span></td><td>Conduzir apresentação e complementar dados do casal/prospect.</td><td>Apresentando e Documentação.</td></tr>
+                <tr><td><span class="pill">Closer</span></td><td>Conduzir negociação e apoiar fechamento.</td><td>Negociando, Documentação, Revisão e Anexo Checklist.</td></tr>
+                <tr><td><span class="pill">Revisor</span></td><td>Conferir dados/documentos e encaminhar finalização.</td><td>Revisão e Finalização.</td></tr>
+                <tr><td><span class="pill">Sub Líder de Captação</span></td><td>Apoiar a captação e organização de agendamentos.</td><td>Captação, Gerente de Captação e Agendado.</td></tr>
+                <tr><td><span class="pill">Sub Líder de Vendas</span></td><td>Apoiar gestão de sala, negociação, documentação e finalização.</td><td>Recepção, Apresentação, Liner, Closer, Negociação, Documentação, Revisão, Anexos e Finalização.</td></tr>
+                <tr><td><span class="pill">Assistente de Contrato</span></td><td>Apoiar documentação, revisão e correção conforme liberação de acesso.</td><td>Documentação, Revisão, Correção ou rotinas administrativas, conforme perfil configurado.</td></tr>
+                <tr><td><span class="pill">Gerente Regional</span></td><td>Acompanhar indicadores, resumo e fluxo das salas sob gestão.</td><td>Resumo, Monitor, Mesa e telas gerenciais, conforme permissão.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="section" id="sec-acesso">
+          <h3>6. Acesso ao sistema</h3>
+
+          <h4>6.1 Entrar no sistema</h4>
+          <div class="steps">
+            <div class="step" data-n="1"><h4>Acesse o sistema</h4><p>Acesse o endereço do sistema no navegador.</p></div>
+            <div class="step" data-n="2"><h4>Informe seu usuário</h4><p>Na tela de login, informe seu e-mail/usuário.</p></div>
+            <div class="step" data-n="3"><h4>Digite sua senha</h4><p>Preencha sua senha de acesso.</p></div>
+            <div class="step" data-n="4"><h4>Confirme</h4><p>Clique em Entrar ou no botão equivalente.</p></div>
+            <div class="step" data-n="5"><h4>Aguarde o carregamento</h4><p>Aguarde o carregamento da página inicial.</p></div>
+          </div>
+          <div class="callout warn">
+            <div class="ic">⚠️</div>
+            <div><strong>Atenção</strong>Nunca compartilhe sua senha. Caso esqueça ou precise alterar, utilize a opção de alteração de senha no Perfil ou acione o administrador do sistema.</div>
+          </div>
+
+          <h4>6.2 Atualizar dados do perfil</h4>
+          <div class="steps">
+            <div class="step" data-n="1"><h4>Acesse Perfil</h4><p>No menu lateral, acesse Perfil.</p></div>
+            <div class="step" data-n="2"><h4>Escolha o que alterar</h4><p>Escolha a opção que deseja alterar: WhatsApp, Senha ou E-mail.</p></div>
+            <div class="step" data-n="3"><h4>Preencha os campos</h4><p>Preencha os campos solicitados.</p></div>
+            <div class="step" data-n="4"><h4>Confirme a alteração</h4><p>Confirme a alteração.</p></div>
+            <div class="step" data-n="5"><h4>Valide o código (se houver)</h4><p>Quando houver validação por código, informe o código recebido e conclua o processo.</p></div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ============================ ÁREA 03 — TELAS DO SISTEMA ============================ -->
+      <div class="area-block" id="area-telas" data-area-id="telas" data-area-name="Telas do Sistema">
+        <div class="area-title">
+          <span class="badge">03</span>
+          <div><h2>Telas do Sistema</h2><div class="area-sub">O que cada item do menu lateral oferece</div></div>
+        </div>
+
+        <section class="section" id="sec-menu-telas">
+          <h3>5. Menu lateral e principais telas</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Menu/Tela</th><th>Quando usar</th><th>O que o usuário encontra</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Atendimentos</strong></td><td>Para visualizar a fila operacional e acompanhar atendimentos em andamento.</td><td>Lista de atendimentos, filtros, busca, status, sala, etapa atual e ações disponíveis.</td></tr>
+                <tr><td><strong>Novo Atendimento</strong></td><td>Para iniciar ou complementar um atendimento.</td><td>Formulários por etapa, dados do casal, sala, horário, qualificação e direcionamento.</td></tr>
+                <tr><td><strong>Histórico</strong></td><td>Para consultar atendimentos anteriores.</td><td>Registros encerrados, vendidos, NQ, No Tour ou finalizados.</td></tr>
+                <tr><td><strong>Monitor de Sala</strong></td><td>Para acompanhar a movimentação da sala.</td><td>Visão de acompanhamento em tempo real ou consolidada da operação.</td></tr>
+                <tr><td><strong>Mesa</strong></td><td>Para gestão operacional do gerente.</td><td>Atendimentos organizados para distribuição, acompanhamento e tomada de decisão.</td></tr>
+                <tr><td><strong>Resumo</strong></td><td>Para análise gerencial.</td><td>Indicadores, cards e relatórios consolidados.</td></tr>
+                <tr><td><strong>Online</strong></td><td>Para gestão de atendimentos online, quando habilitado.</td><td>Fila ou painel específico de atendimentos online.</td></tr>
+                <tr><td><strong>Proposta de Venda</strong></td><td>Para preencher ou revisar dados da venda.</td><td>Empreendimento, unidade, valor, desconto, parcelas, vencimento e pagamento.</td></tr>
+                <tr><td><strong>Documentação</strong></td><td>Para geração e conferência documental.</td><td>Dados para documentos, contrato, assinatura e anexos.</td></tr>
+                <tr><td><strong>Revisão</strong></td><td>Para conferência final.</td><td>Validação dos dados do atendimento e da venda antes da finalização.</td></tr>
+                <tr><td><strong>Correção Vendas</strong></td><td>Para corrigir/reprocessar vendas com falha.</td><td>Reprocessamento total, reprocessamento de cota e edição de informações conforme permissão.</td></tr>
+                <tr><td><strong>Cotas</strong></td><td>Para controle de cotas quando disponível.</td><td>Consulta e acompanhamento de cotas relacionadas às vendas.</td></tr>
+                <tr><td><strong>Usuários</strong></td><td>Para administrar acessos.</td><td>Cadastro, edição, funções, sala, empresa e permissões do usuário.</td></tr>
+                <tr><td><strong>Perfil</strong></td><td>Para alterar dados do próprio usuário.</td><td>Edição de WhatsApp, senha e e-mail.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- ============================ ÁREA 04 — FLUXO DE ATENDIMENTO ============================ -->
+      <div class="area-block" id="area-fluxo" data-area-id="fluxo" data-area-name="Fluxo de Atendimento">
+        <div class="area-title">
+          <span class="badge">04</span>
+          <div><h2>Fluxo de Atendimento</h2><div class="area-sub">Da Captação à Negociação, etapa a etapa</div></div>
+        </div>
+
+        <section class="section" id="sec-fluxo-geral">
+          <h3>7. Fluxo geral do atendimento</h3>
+          <p>O atendimento percorre um fluxo operacional. Nem todos os usuários visualizam todas as etapas; o sistema exibe conforme o perfil e a configuração da sala.</p>
+          <div class="steps">
+            <div class="step" data-n="1"><h4>Captação</h4><p>Registrar lead/prospect, sala, data, horário, WhatsApp, brinde e informações iniciais. <em>Responsável: Captador / Sub Líder de Captação.</em></p></div>
+            <div class="step" data-n="2"><h4>Gerente de Captação</h4><p>Validar ou acompanhar a captação, quando houver aprovação ou passagem de etapa. <em>Responsável: Gerente de Captação.</em></p></div>
+            <div class="step" data-n="3"><h4>Recepção</h4><p>Confirmar chegada, dados pessoais e informações de atendimento. <em>Responsável: Recepcionista.</em></p></div>
+            <div class="step" data-n="4"><h4>Gerente de Sala / Apresentação</h4><p>Direcionar o atendimento e selecionar/acompanhar o Liner. <em>Responsável: Gerente de Sala.</em></p></div>
+            <div class="step" data-n="5"><h4>Apresentando / Liner</h4><p>Complementar dados, perfil do casal, renda, veículo, cartão e demais informações comerciais. <em>Responsável: Liner.</em></p></div>
+            <div class="step" data-n="6"><h4>Negociação / Closer</h4><p>Registrar negociação, avançar para proposta ou encerramento conforme resultado. <em>Responsável: Closer / Gerente de Sala.</em></p></div>
+            <div class="step" data-n="7"><h4>Proposta de Venda</h4><p>Preencher dados da venda, empreendimento, valores, parcelas, vencimento e pagamento. <em>Responsável: Closer / Administrativo.</em></p></div>
+            <div class="step" data-n="8"><h4>Documentação</h4><p>Gerar documentos, contrato e materiais de assinatura. <em>Responsável: Documentação / Contratos.</em></p></div>
+            <div class="step" data-n="9"><h4>Revisão</h4><p>Conferir dados e inconsistências antes da finalização. <em>Responsável: Revisor / Assistente de Contrato.</em></p></div>
+            <div class="step" data-n="10"><h4>Anexo Checklist</h4><p>Anexar checklist e documentos obrigatórios, quando aplicável. <em>Responsável: Closer / Contratos.</em></p></div>
+            <div class="step" data-n="11"><h4>Finalização</h4><p>Concluir o atendimento/venda ou encerrar com o status correto. <em>Responsável: Revisor / Administrativo.</em></p></div>
+          </div>
+        </section>
+
+        <section class="section" id="sec-consultar" data-roles="captador recepcionista gerente-captacao gerente-sala liner closer revisor sub-captacao sub-vendas admin">
+          <h3>8. Como consultar atendimentos</h3>
+          <div class="steps">
+            <div class="step" data-n="1"><h4>Acesse o menu</h4><p>Acesse o menu Atendimentos.</p></div>
+            <div class="step" data-n="2"><h4>Busque</h4><p>Use o campo de busca para localizar por nome, CPF/CNPJ, telefone ou informação disponível.</p></div>
+            <div class="step" data-n="3"><h4>Filtre</h4><p>Utilize os filtros de sala, data e status para reduzir a lista.</p></div>
+            <div class="step" data-n="4"><h4>Verifique a etapa</h4><p>Verifique a etapa atual do atendimento.</p></div>
+            <div class="step" data-n="5"><h4>Abra o atendimento</h4><p>Clique no atendimento desejado para visualizar, editar ou avançar conforme permissão.</p></div>
+          </div>
+          <h4>8.1 Boas práticas na consulta</h4>
+          <ul class="check-list">
+            <li>Antes de criar um novo atendimento, pesquise se já existe registro do casal/prospect.</li>
+            <li>Evite duplicidade de cadastro.</li>
+            <li>Confira a sala e a data antes de alterar qualquer informação.</li>
+            <li>Se o atendimento não aparecer, verifique filtros aplicados ou consulte o histórico.</li>
+          </ul>
+        </section>
+
+        <section class="section" id="sec-criar" data-roles="captador recepcionista gerente-captacao gerente-sala sub-captacao admin">
+          <h3>9. Como criar um novo atendimento</h3>
+          <p>A criação de um novo atendimento deve ser feita quando ainda não houver registro do casal/prospect para o fluxo desejado.</p>
+          <div class="steps">
+            <div class="step" data-n="1"><h4>Novo Atendimento</h4><p>No menu Atendimentos, clique em Novo Atendimento ou na ação equivalente.</p></div>
+            <div class="step" data-n="2"><h4>Etapa inicial</h4><p>Selecione a etapa inicial, normalmente Captação ou Agendamento, conforme o fluxo da sala.</p></div>
+            <div class="step" data-n="3"><h4>Sala</h4><p>Preencha a sala de atendimento e o tipo de sala.</p></div>
+            <div class="step" data-n="4"><h4>Data e horário</h4><p>Informe data e horário do atendimento/agendamento.</p></div>
+            <div class="step" data-n="5"><h4>WhatsApp</h4><p>Preencha o WhatsApp com DDI e número.</p></div>
+            <div class="step" data-n="6"><h4>Motorista</h4><p>Informe se precisa de motorista e, se sim, preencha o nome do motorista.</p></div>
+            <div class="step" data-n="7"><h4>Brinde e demais campos</h4><p>Preencha brinde, quantidade, valor negociado ou demais campos exibidos.</p></div>
+            <div class="step" data-n="8"><h4>Qualificação</h4><p>Informe qualificação ou motivo de NQ/No Tour quando aplicável.</p></div>
+            <div class="step" data-n="9"><h4>Revise</h4><p>Revise os dados antes de salvar.</p></div>
+            <div class="step" data-n="10"><h4>Salve</h4><p>Clique em Salvar, Confirmar ou Avançar para registrar o atendimento.</p></div>
+          </div>
+          <div class="callout warn">
+            <div class="ic">⚠️</div>
+            <div><strong>Campos obrigatórios</strong>O sistema valida campos obrigatórios como data, horário, WhatsApp, sala, tipo de sala e, em alguns casos, motorista. Quando faltar alguma informação, a própria tela sinaliza o campo que precisa ser corrigido.</div>
+          </div>
+        </section>
+
+        <section class="section" id="sec-captacao" data-roles="captador gerente-captacao sub-captacao admin">
+          <h3>10. Etapa de Captação</h3>
+          <p>A etapa de Captação registra a origem do lead/prospect e as informações iniciais para direcionamento do atendimento.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th style="width:26%">Campo/ação</th><th>Orientação</th></tr></thead>
+              <tbody>
+                <tr><td>Sala e tipo de sala</td><td>Selecione corretamente a sala onde o atendimento acontecerá.</td></tr>
+                <tr><td>Data e horário</td><td>Informe a data e o horário do agendamento ou atendimento.</td></tr>
+                <tr><td>WhatsApp</td><td>Preencha DDI e número corretamente para contato posterior.</td></tr>
+                <tr><td>Brinde</td><td>Informe o tipo de brinde e a quantidade, quando aplicável.</td></tr>
+                <tr><td>Motorista</td><td>Marque se precisa de motorista e informe o nome quando obrigatório.</td></tr>
+                <tr><td>Qualificação Q/NQ</td><td>Registre se o casal/prospect está qualificado ou não qualificado conforme critérios internos.</td></tr>
+                <tr><td>Motivo No Tour/NQ</td><td>Quando encerrar ou desqualificar, selecione o motivo correto e descreva observações se necessário.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="section" id="sec-recepcao" data-roles="recepcionista gerente-sala gerente-captacao sub-vendas admin">
+          <h3>11. Etapa de Recepção</h3>
+          <p>A Recepção confirma a chegada e complementa as informações essenciais do casal/prospect.</p>
+          <ul class="check-list">
+            <li>Confirme nome, CPF/CNPJ, e-mail e WhatsApp.</li>
+            <li>Informe quantidade de filhos, gestante, acompanhantes e relação com o casal, quando solicitado.</li>
+            <li>Registre nacionalidade, UF, cidade e observações relevantes.</li>
+            <li>Verifique se o atendimento deve seguir para apresentação ou se precisa ser encerrado com motivo apropriado.</li>
+            <li>Salve apenas após conferir os dados com o cliente.</li>
+          </ul>
+        </section>
+
+        <section class="section" id="sec-gerente-sala" data-roles="gerente-sala sub-vendas admin">
+          <h3>12. Etapa do Gerente de Sala</h3>
+          <p>O Gerente de Sala acompanha a distribuição e andamento dos atendimentos, garantindo que cada casal/prospect siga para o responsável correto.</p>
+          <ul class="check-list">
+            <li>Acompanhar fila de atendimentos.</li>
+            <li>Selecionar ou confirmar o Liner para apresentação.</li>
+            <li>Acompanhar transição para negociação.</li>
+            <li>Selecionar ou confirmar o Closer quando aplicável.</li>
+            <li>Intervir em casos de parada, atraso, inconsistência de informação ou necessidade de correção.</li>
+          </ul>
+        </section>
+
+        <section class="section" id="sec-liner" data-roles="liner gerente-sala sub-vendas gerente-captacao admin">
+          <h3>13. Etapa Liner / Apresentando</h3>
+          <p>Nesta etapa são complementadas informações comerciais e cadastrais importantes para entendimento do perfil do casal/prospect.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th style="width:22%">Grupo de dados</th><th>O que preencher/conferir</th></tr></thead>
+              <tbody>
+                <tr><td>Dados pessoais</td><td>Nome completo, CPF/CNPJ, RG, órgão/UF, data de nascimento, e-mail e telefone.</td></tr>
+                <tr><td>Dados do cônjuge</td><td>Nome, CPF/CNPJ, RG, data de nascimento, e-mail, telefone e profissão do cônjuge, quando houver.</td></tr>
+                <tr><td>Endereço</td><td>CEP, logradouro, número, bairro, complemento, cidade e UF.</td></tr>
+                <tr><td>Perfil familiar</td><td>Estado civil, tempo de união, filhos, acompanhantes e relação com o casal.</td></tr>
+                <tr><td>Perfil econômico</td><td>Profissão, renda do casal, uso de cartão de crédito, residência própria e residência na cidade.</td></tr>
+                <tr><td>Veículos</td><td>Modelo e ano de fabricação dos veículos, quando aplicável.</td></tr>
+                <tr><td>Origem do casal</td><td>Local de captura, origem e observações complementares.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="section" id="sec-closer" data-roles="closer gerente-sala sub-vendas gerente-captacao admin">
+          <h3>14. Etapa Closer / Negociação</h3>
+          <p>O Closer registra a negociação e conduz o atendimento para proposta, documentação ou encerramento.</p>
+          <ul class="check-list">
+            <li>Confirme se o casal/prospect possui todos os dados necessários para a proposta.</li>
+            <li>Registre observações relevantes da negociação.</li>
+            <li>Selecione o resultado correto: venda, continuidade, revisão, documentação, NQ, No Tour ou encerramento conforme fluxo disponível.</li>
+            <li>Quando houver venda, avance para o preenchimento da proposta.</li>
+            <li>Não avance com dados incompletos ou divergentes.</li>
+          </ul>
+        </section>
+      </div>
+
+      <!-- ============================ ÁREA 05 — PROPOSTA & DOCUMENTAÇÃO ============================ -->
+      <div class="area-block" id="area-proposta" data-area-id="proposta" data-area-name="Proposta &amp; Documentação">
+        <div class="area-title">
+          <span class="badge">05</span>
+          <div><h2>Proposta &amp; Documentação</h2><div class="area-sub">Da venda ao contrato pronto para assinatura</div></div>
+        </div>
+
+        <section class="section" id="sec-proposta-venda" data-roles="closer sub-vendas assistente-contrato gerente-sala admin">
+          <h3>15. Proposta de Venda</h3>
+          <p>A tela de proposta concentra os dados comerciais e financeiros da venda. O preenchimento correto evita retrabalho na documentação e revisão.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Bloco</th><th>Campos comuns</th><th>Cuidados</th></tr></thead>
+              <tbody>
+                <tr><td>Dados da venda</td><td>Empreendimento, unidade, modelo de venda, finalidade da compra e data da proposta.</td><td>Confirme empreendimento e unidade antes de salvar.</td></tr>
+                <tr><td>Valores</td><td>Valor à vista, comissão, desconto, valor total a pagar e quantidade de parcelas.</td><td>Verifique se o desconto foi autorizado e se o total final está correto.</td></tr>
+                <tr><td>Parcelamento</td><td>Quantidade de parcelas, dia de vencimento e valor da parcela.</td><td>Confira vencimento e valor conforme negociação aprovada.</td></tr>
+                <tr><td>Pagamento</td><td>Meio de pagamento: PIX, Cartão, Boleto, Transferência, Crédito à Vista, Crédito Parcelado ou Débito.</td><td>Preencha dados complementares do pagamento, como NSU, autorização, final do cartão, operação e terminal, quando solicitado.</td></tr>
+                <tr><td>Responsáveis</td><td>Captador/Promotor, Liner, Closer e demais responsáveis.</td><td>Garanta que os responsáveis estejam corretamente associados ao atendimento.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4>15.1 Passo a passo para preencher a proposta</h4>
+          <div class="steps">
+            <div class="step" data-n="1"><h4>Abra a proposta</h4><p>Acesse o atendimento vendido e clique em Proposta de Venda ou na etapa equivalente.</p></div>
+            <div class="step" data-n="2"><h4>Empreendimento e unidade</h4><p>Preencha empreendimento e unidade.</p></div>
+            <div class="step" data-n="3"><h4>Modelo e finalidade</h4><p>Informe modelo de venda e finalidade da compra.</p></div>
+            <div class="step" data-n="4"><h4>Valores negociados</h4><p>Digite valor à vista e demais valores negociados.</p></div>
+            <div class="step" data-n="5"><h4>Desconto</h4><p>Informe se há desconto e preencha percentual ou valor de desconto, quando permitido.</p></div>
+            <div class="step" data-n="6"><h4>Confira o total</h4><p>Confira o valor total a pagar.</p></div>
+            <div class="step" data-n="7"><h4>Parcelamento</h4><p>Defina quantidade de parcelas, dia de vencimento e valor de parcela.</p></div>
+            <div class="step" data-n="8"><h4>Meio de pagamento</h4><p>Selecione o meio de pagamento.</p></div>
+            <div class="step" data-n="9"><h4>Campos específicos</h4><p>Preencha os campos específicos do meio de pagamento escolhido.</p></div>
+            <div class="step" data-n="10"><h4>Revise e salve</h4><p>Revise todos os dados e salve.</p></div>
+            <div class="step" data-n="11"><h4>Avance</h4><p>Avance para documentação conforme o fluxo da sala.</p></div>
+          </div>
+        </section>
+
+        <section class="section" id="sec-documentacao" data-roles="liner closer revisor sub-vendas assistente-contrato gerente-captacao admin">
+          <h3>16. Documentação</h3>
+          <p>A etapa de Documentação deve ser usada para gerar documentos, contratos e encaminhar assinatura digital quando disponível.</p>
+          <ul class="check-list">
+            <li>Confira se os dados pessoais do titular e cônjuge estão completos.</li>
+            <li>Confirme empreendimento, unidade, valores e forma de pagamento.</li>
+            <li>Gere contrato de compra e venda quando o sistema disponibilizar a ação.</li>
+            <li>Gere documentos complementares da venda.</li>
+            <li>Encaminhe contrato para assinatura digital quando o fluxo solicitar.</li>
+            <li>Anexe documentos/checklist quando necessário.</li>
+            <li>Não conclua a etapa se houver dados divergentes ou documentos pendentes.</li>
+          </ul>
+        </section>
+
+        <section class="section" id="sec-revisao" data-roles="closer revisor sub-vendas assistente-contrato gerente-captacao gerente-sala admin">
+          <h3>17. Revisão e Finalização</h3>
+          <p>A Revisão é a conferência final antes da conclusão do atendimento ou venda.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th style="width:22%">O que revisar</th><th>Como conferir</th></tr></thead>
+              <tbody>
+                <tr><td>Dados do cliente</td><td>Nome, CPF/CNPJ, RG, e-mail, telefone, endereço e dados do cônjuge.</td></tr>
+                <tr><td>Dados comerciais</td><td>Empreendimento, unidade, modelo de venda, valor, desconto, parcelas e vencimentos.</td></tr>
+                <tr><td>Pagamento</td><td>Meio de pagamento e informações específicas como NSU, autorização, final do cartão ou operação.</td></tr>
+                <tr><td>Documentos</td><td>Contrato, checklist, anexos e assinatura digital, quando houver.</td></tr>
+                <tr><td>Responsáveis</td><td>Captador/promotor, Liner, Closer, gerentes e demais vínculos necessários.</td></tr>
+                <tr><td>Status final</td><td>Venda concluída, finalização, NQ, No Tour, agendado ou outro status compatível.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout rule">
+            <div class="ic">✅</div>
+            <div><strong>Regra prática</strong>Se houver divergência, não finalize. Retorne para a etapa correta, solicite correção ao responsável ou use a rotina de correção quando disponível.</div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ============================ ÁREA 06 — GESTÃO & RELATÓRIOS ============================ -->
+      <div class="area-block" id="area-gestao" data-area-id="gestao" data-area-name="Gestão &amp; Relatórios">
+        <div class="area-title">
+          <span class="badge">06</span>
+          <div><h2>Gestão &amp; Relatórios</h2><div class="area-sub">Histórico, indicadores, correções e administração</div></div>
+        </div>
+
+        <section class="section" id="sec-historico" data-roles="recepcionista gerente-sala gerente-captacao sub-captacao sub-vendas gerente-regional admin">
+          <h3>18. Histórico</h3>
+          <p>O Histórico serve para consulta de atendimentos já encerrados, concluídos, vendidos ou movimentados anteriormente.</p>
+          <ul class="check-list">
+            <li>Use filtros por data, sala, status ou busca textual.</li>
+            <li>Consulte o histórico antes de abrir novo registro para o mesmo casal/prospect.</li>
+            <li>Utilize as informações do histórico para auditoria, acompanhamento ou suporte ao usuário.</li>
+          </ul>
+        </section>
+
+        <section class="section" id="sec-monitor" data-roles="gerente-sala gerente-regional sub-vendas admin">
+          <h3>19. Monitor de Sala, Mesa e Resumo</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th style="width:20%">Tela</th><th>Uso recomendado</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Monitor de Sala</strong></td><td>Acompanhar a operação da sala, movimentação e atendimentos em tempo real ou consolidado.</td></tr>
+                <tr><td><strong>Mesa</strong></td><td>Visualizar e organizar atendimentos sob gestão do gerente de sala. Útil para distribuição e tomada de decisão.</td></tr>
+                <tr><td><strong>Resumo</strong></td><td>Acompanhar indicadores, volume de atendimentos, vendas, taxas, fluidez e dados gerenciais.</td></tr>
+                <tr><td><strong>Online</strong></td><td>Gerenciar atendimentos online quando o módulo estiver habilitado para o perfil.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="section" id="sec-relatorios" data-roles="gerente-regional gerente-sala admin">
+          <h3>20. Relatórios e indicadores</h3>
+          <p>O sistema possui indicadores e cards que podem variar conforme perfil e configuração. Entre os indicadores mapeados no código estão:</p>
+          <ul class="check-list">
+            <li>Agendamentos realizados.</li>
+            <li>Pesquisas realizadas.</li>
+            <li>Show Rate.</li>
+            <li>Casais que assistiram.</li>
+            <li>Vendas realizadas.</li>
+            <li>Ticket médio.</li>
+            <li>Leads por dia.</li>
+            <li>Motivos de NQ.</li>
+            <li>Atendimentos encerrados.</li>
+            <li>Taxa de aprovação da recepção.</li>
+            <li>Brindes emitidos.</li>
+            <li>Total de casais do dia.</li>
+            <li>Fluidez, TMA, TME e atendimentos acima do TMA.</li>
+          </ul>
+          <div class="callout info">
+            <div class="ic">ℹ️</div>
+            <div><strong>Exportação</strong>Quando a opção estiver disponível, utilize Exportar CSV ou Exportar relatório Excel para baixar informações e apoiar análises externas.</div>
+          </div>
+        </section>
+
+        <section class="section" id="sec-correcao" data-roles="assistente-contrato admin">
+          <h3>21. Correção de vendas</h3>
+          <p>A tela Correção Vendas é destinada a usuários autorizados. Deve ser utilizada apenas quando houver erro, falha de processamento, inconsistência ou necessidade de reprocessamento.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Ação</th><th>Quando usar</th><th>Cuidado</th></tr></thead>
+              <tbody>
+                <tr><td>Reprocessar venda inteira</td><td>Quando a venda apresentou falha geral e precisa ser reenviada/refeita no fluxo integrado.</td><td>Use somente após confirmar que não haverá duplicidade.</td></tr>
+                <tr><td>Reprocessar somente esta cota</td><td>Quando apenas uma cota específica falhou.</td><td>Confira a cota correta antes de executar.</td></tr>
+                <tr><td>Ver falhas e editar payload</td><td>Quando for necessário analisar o motivo da falha e corrigir informações técnicas/operacionais.</td><td>Apenas usuários capacitados devem editar dados de payload.</td></tr>
+                <tr><td>Editar venda</td><td>Quando houver necessidade de ajustar informações da venda conforme permissão.</td><td>Faça alterações com base em documento ou autorização válida.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="section" id="sec-usuarios" data-roles="admin">
+          <h3>22. Gestão de usuários</h3>
+          <p>A tela Usuários é restrita a perfis administrativos ou autorizados. Nela é possível cadastrar, editar e configurar permissões.</p>
+          <div class="steps">
+            <div class="step" data-n="1"><h4>Acesse Usuários</h4><p>Acesse Usuários no menu lateral.</p></div>
+            <div class="step" data-n="2"><h4>Novo cadastro</h4><p>Para novo cadastro, clique em Novo Usuário.</p></div>
+            <div class="step" data-n="3"><h4>Dados do usuário</h4><p>Preencha nome, e-mail, WhatsApp, CPF/CNPJ e gênero, quando solicitado.</p></div>
+            <div class="step" data-n="4"><h4>Funções</h4><p>Selecione uma ou mais funções do usuário.</p></div>
+            <div class="step" data-n="5"><h4>Vínculos</h4><p>Associe empresa, sala, gerente de sala, gerente de captação, sub líderes ou demais vínculos exibidos.</p></div>
+            <div class="step" data-n="6"><h4>Aprovação automática</h4><p>Defina se haverá aprovação automática de atendimentos, quando o campo estiver disponível.</p></div>
+            <div class="step" data-n="7"><h4>Salve</h4><p>Salve o cadastro.</p></div>
+            <div class="step" data-n="8"><h4>Editar</h4><p>Para editar, localize o usuário na busca e acesse Editar usuário.</p></div>
+          </div>
+          <div class="callout warn">
+            <div class="ic">⚠️</div>
+            <div><strong>Permissões</strong>Funções incorretas podem liberar telas indevidas ou impedir que o usuário execute sua rotina. Revise o perfil antes de concluir o cadastro.</div>
+          </div>
+        </section>
+
+        <section class="section" id="sec-cotas" data-roles="gerente-regional assistente-contrato admin">
+          <h3>23. Cotas</h3>
+          <p>A tela Cotas aparece para perfis específicos e deve ser usada para consulta e acompanhamento de cotas relacionadas às vendas. Quando a informação não estiver disponível, verifique se o perfil possui permissão ou se a venda já foi corretamente processada.</p>
+        </section>
+      </div>
+
+      <!-- ============================ ÁREA 07 — BOAS PRÁTICAS ============================ -->
+      <div class="area-block" id="area-praticas" data-area-id="praticas" data-area-name="Boas Práticas">
+        <div class="area-title">
+          <span class="badge">07</span>
+          <div><h2>Boas Práticas</h2><div class="area-sub">Padrões, erros comuns e checklists por perfil</div></div>
+        </div>
+
+        <section class="section" id="sec-padrao">
+          <h3>24. Padrão de preenchimento recomendado</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th style="width:20%">Situação</th><th>Padrão recomendado</th></tr></thead>
+              <tbody>
+                <tr><td>Nome</td><td>Preencher nome completo, sem abreviações desnecessárias.</td></tr>
+                <tr><td>CPF/CNPJ</td><td>Conferir número antes de salvar. Evitar pontuação incorreta quando o campo formatar automaticamente.</td></tr>
+                <tr><td>WhatsApp</td><td>Conferir DDI e número. Garantir que o número esteja ativo.</td></tr>
+                <tr><td>E-mail</td><td>Usar e-mail válido e conferir digitação.</td></tr>
+                <tr><td>Endereço</td><td>Usar CEP correto e revisar logradouro, número, bairro, cidade e UF.</td></tr>
+                <tr><td>Observações</td><td>Registrar somente informações úteis, objetivas e profissionais.</td></tr>
+                <tr><td>Pagamento</td><td>Conferir meio de pagamento e campos específicos antes de avançar.</td></tr>
+                <tr><td>Encerramento</td><td>Escolher o status/motivo correto para preservar indicadores.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="section" id="sec-erros">
+          <h3>25. Erros comuns e como evitar</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Erro comum</th><th>Impacto</th><th>Como evitar</th></tr></thead>
+              <tbody>
+                <tr><td>Criar atendimento duplicado</td><td>Distorce fila, histórico e indicadores.</td><td>Pesquisar antes de cadastrar.</td></tr>
+                <tr><td>Selecionar sala errada</td><td>Atendimento aparece na operação incorreta.</td><td>Conferir sala e tipo de sala antes de salvar.</td></tr>
+                <tr><td>Avançar etapa sem dados completos</td><td>Gera retrabalho na documentação e revisão.</td><td>Validar campos obrigatórios e informações principais.</td></tr>
+                <tr><td>Escolher motivo NQ/No Tour incorreto</td><td>Prejudica indicadores de qualidade e análise gerencial.</td><td>Usar motivo compatível com a situação real.</td></tr>
+                <tr><td>Informar valor ou parcela divergente</td><td>Pode gerar erro contratual e financeiro.</td><td>Conferir proposta com a negociação aprovada.</td></tr>
+                <tr><td>Finalizar com documento pendente</td><td>Venda pode ficar irregular ou exigir correção posterior.</td><td>Checar contrato, checklist, anexos e assinatura.</td></tr>
+                <tr><td>Editar venda sem autorização</td><td>Pode gerar inconsistência e risco de auditoria.</td><td>Usar Correção Vendas apenas com validação e permissão.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="section" id="sec-checklist">
+          <h3>26. Checklist rápido por perfil</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th style="width:20%">Perfil</th><th>Antes de salvar ou avançar, confirmar</th></tr></thead>
+              <tbody>
+                <tr><td><span class="pill">Captador</span></td><td>Sala, data, horário, WhatsApp, brinde, motorista e qualificação.</td></tr>
+                <tr><td><span class="pill">Recepcionista</span></td><td>Dados pessoais, acompanhantes, cidade/UF, observação e direcionamento.</td></tr>
+                <tr><td><span class="pill">Gerente de Captação</span></td><td>Qualificação, aprovação e passagem para recepção/apresentação.</td></tr>
+                <tr><td><span class="pill">Gerente de Sala</span></td><td>Fila da sala, responsável definido, Liner/Closer e etapa correta.</td></tr>
+                <tr><td><span class="pill">Liner</span></td><td>Dados pessoais, cônjuge, renda, endereço, veículos, cartão e origem.</td></tr>
+                <tr><td><span class="pill">Closer</span></td><td>Resultado da negociação, proposta completa, forma de pagamento e próximos passos.</td></tr>
+                <tr><td><span class="pill">Documentação</span></td><td>Contrato, documentos, assinatura, checklist e informações da proposta.</td></tr>
+                <tr><td><span class="pill">Revisor</span></td><td>Dados cadastrais, comerciais, financeiros, documentos e status final.</td></tr>
+                <tr><td><span class="pill">Administrador</span></td><td>Usuários, funções, permissões, correções e consistência geral do sistema.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="section" id="sec-roteiro">
+          <h3>27. Roteiro rápido de treinamento</h3>
+          <p>Sugestão de condução para treinamento dos usuários:</p>
+          <div class="steps">
+            <div class="step" data-n="1"><h4>Objetivo do sistema</h4><p>Apresentar objetivo do sistema e etapas do atendimento.</p></div>
+            <div class="step" data-n="2"><h4>Perfis e permissões</h4><p>Explicar perfis e permissões.</p></div>
+            <div class="step" data-n="3"><h4>Login e menu</h4><p>Demonstrar login, perfil e menu lateral.</p></div>
+            <div class="step" data-n="4"><h4>Criar atendimento</h4><p>Simular criação de atendimento desde Captação.</p></div>
+            <div class="step" data-n="5"><h4>Recepção e Liner</h4><p>Simular Recepção, seleção de Liner e etapa Apresentando.</p></div>
+            <div class="step" data-n="6"><h4>Negociação e proposta</h4><p>Simular Negociação e preenchimento de Proposta de Venda.</p></div>
+            <div class="step" data-n="7"><h4>Documentação e Revisão</h4><p>Demonstrar Documentação e Revisão.</p></div>
+            <div class="step" data-n="8"><h4>Telas gerenciais</h4><p>Mostrar Histórico, Monitor, Mesa e Resumo.</p></div>
+            <div class="step" data-n="9"><h4>Correção de vendas</h4><p>Explicar Correção Vendas apenas para perfis autorizados.</p></div>
+            <div class="step" data-n="10"><h4>Encerramento</h4><p>Encerrar com checklist de erros comuns e boas práticas.</p></div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ============================ ÁREA 08 — GLOSSÁRIO & ANEXOS ============================ -->
+      <div class="area-block" id="area-glossario" data-area-id="glossario" data-area-name="Glossário &amp; Anexos">
+        <div class="area-title">
+          <span class="badge">08</span>
+          <div><h2>Glossário &amp; Anexos</h2><div class="area-sub">Termos do sistema e observações finais</div></div>
+        </div>
+
+        <section class="section" id="sec-glossario">
+          <h3>28. Glossário</h3>
+          <div class="glossary-grid">
+            <div class="gloss-item"><span class="term">ACQUISITION / Captação</span><span class="def">Etapa de cadastro e origem do atendimento.</span></div>
+            <div class="gloss-item"><span class="term">RECEPTION / Recepção</span><span class="def">Etapa de confirmação de chegada e dados iniciais.</span></div>
+            <div class="gloss-item"><span class="term">CAPTION_LEADER / Gerente de Captação</span><span class="def">Etapa ou perfil ligado à gestão da captação.</span></div>
+            <div class="gloss-item"><span class="term">SALES_LEADER_PRESENTATION / Apresentação</span><span class="def">Momento de direcionamento para apresentação/Liner.</span></div>
+            <div class="gloss-item"><span class="term">LINER / Apresentando</span><span class="def">Etapa do Liner com apresentação e complemento de dados.</span></div>
+            <div class="gloss-item"><span class="term">CLOSER / Negociando</span><span class="def">Etapa do Closer e negociação.</span></div>
+            <div class="gloss-item"><span class="term">DOCUMENTATION / Documentação</span><span class="def">Etapa documental e geração/envio de contrato.</span></div>
+            <div class="gloss-item"><span class="term">REVISION / Revisão</span><span class="def">Conferência antes da conclusão.</span></div>
+            <div class="gloss-item"><span class="term">SCHEDULED / Agendado</span><span class="def">Atendimento programado para data/horário.</span></div>
+            <div class="gloss-item"><span class="term">ATTACHMENTS / Anexo Checklist</span><span class="def">Etapa de anexos ou checklist.</span></div>
+            <div class="gloss-item"><span class="term">LAST_REVISION / Finalização</span><span class="def">Conclusão final do processo.</span></div>
+            <div class="gloss-item"><span class="term">SOLD / Vendido</span><span class="def">Venda realizada.</span></div>
+            <div class="gloss-item"><span class="term">CLOSED / Fechado</span><span class="def">Atendimento/venda encerrado ou concluído.</span></div>
+            <div class="gloss-item"><span class="term">SEARCH / Pesquisa</span><span class="def">Etapa ou módulo de pesquisa, quando habilitado.</span></div>
+          </div>
+        </section>
+
+        <section class="section" id="sec-observacoes">
+          <h3>29. Observações finais</h3>
+          <p>Este manual é uma base inicial para treinamento e padronização de uso. Recomenda-se que a empresa revise as regras específicas, nomenclaturas finais dos botões, políticas de aprovação, responsáveis por correção e orientações de documentação antes da distribuição oficial.</p>
+          <ul class="check-list">
+            <li>Mantenha o manual atualizado sempre que houver mudança no fluxo.</li>
+            <li>Revise permissões periodicamente.</li>
+            <li>Use linguagem clara nas observações dos atendimentos.</li>
+            <li>Priorize a conferência antes de avançar etapas.</li>
+            <li>Em caso de dúvida, acione liderança ou administrador do sistema.</li>
+          </ul>
+
+          <div class="section-nav">
+            <a href="#topo"><span class="lbl">Voltar ao início</span><span class="ttl">Sumário do manual</span></a>
+            <a class="next" href="#sec-objetivo"><span class="lbl">Reler</span><span class="ttl">1. Objetivo do manual →</span></a>
+          </div>
+        </section>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<button class="back-top" id="backTop" aria-label="Voltar ao topo">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/sac.js"></script>
+</body>
+</html>
