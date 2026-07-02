@@ -8,4 +8,4 @@
    const FLOW_API_URL = "https://script.google.com/macros/s/AKfycb.../exec";
    ========================================================================== */
 
-const FLOW_API_URL = "COLE_AQUI_A_URL_DO_SEU_APPS_SCRIPT";
+const FLOW_API_URL = "https://script.google.com/macros/s/AKfycbzn_NvIssQ0Nmzbmp-unUF4_6C_zdLT2df-rZAl6zqbCVbOaE5SOz27CN_l8pmDgGs1/exec";
